@@ -40,8 +40,7 @@ class RankedLogger(logging.LoggerAdapter):
             msg, kwargs = self.process(msg, kwargs)
             current_rank = getattr(rank_zero_only, "rank", None)
             if current_rank is None:
-                error_msg = "The `rank_zero_only.rank` needs to be set before use"
-                raise RuntimeError(error_msg)
+                raise RuntimeError("The `rank_zero_only.rank` needs to be set before use")
             msg = rank_prefixed_message(msg, current_rank)
             if self.rank_zero_only:
                 if current_rank == 0:

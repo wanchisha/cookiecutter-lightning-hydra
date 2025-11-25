@@ -1,5 +1,7 @@
 from typing import Any
 
+from omegaconf import DictConfig
+
 import torch
 from lightning import LightningModule
 from torchmetrics import MaxMetric, MeanMetric
@@ -45,6 +47,7 @@ class MNISTLitModule(LightningModule):
         optimizer: torch.optim.Optimizer,
         scheduler: torch.optim.lr_scheduler,
         torch_compile: bool,
+        configure_optimizers: DictConfig | None = None,
     ) -> None:
         """Initialize a `MNISTLitModule`.
 

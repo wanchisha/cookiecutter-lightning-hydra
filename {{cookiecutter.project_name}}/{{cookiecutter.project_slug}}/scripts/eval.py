@@ -27,8 +27,7 @@ def evaluate(cfg: DictConfig) -> tuple[dict[str, Any], dict[str, Any]]:
     :return: tuple[dict, dict] with metrics and dict with all instantiated objects.
     """
     if cfg.ckpt_path is None or cfg.ckpt_path == "":
-        error_msg = "Please provide a checkpoint path for evaluation!"
-        raise ValueError(error_msg)
+        raise ValueError("Please provide a checkpoint path for evaluation!")
 
     log.info(f"Instantiating datamodule <{cfg.data._target_}>")
     datamodule: LightningDataModule = hydra.utils.instantiate(cfg.data)
