@@ -12,6 +12,7 @@ def _smart_format_value(val: Any, max_sig: Optional[int] = 6) -> Any:
       the full Python float string representation (no forced truncation).
     - other values are returned unchanged or converted to str as a fallback
     """
+    # TODO: Evaluate whether ndarrays and tensors should be supported; these cases are unlikely to arise in practice
     try:
         if isinstance(val, float):
             # If max_sig is None -> return Python's str representation (no artificial limit).
@@ -37,7 +38,7 @@ class SmartRichProgressBar(RichProgressBar):
     and very small/large numbers in scientific notation when appropriate.
     """
 
-    def __init__(self, *args, max_significant_digits: Optional[int] = None, **kwargs):
+    def __init__(self, *args, max_significant_digits: Optional[int] = 6, **kwargs):
         super().__init__(*args, **kwargs)
         self._max_sig = max_significant_digits
 
