@@ -1,11 +1,11 @@
 site_name: cookiecutter-pytorch-lightning
-repo_url: https://github.com/foreverYoungGitHub/cookiecutter-pytorch-lightning
-site_url: https://foreveryounggithub.github.io/cookiecutter-pytorch-lightning
+repo_url: https://github.com/wanchisha/cookiecutter-lightning-hydra
+site_url: https://wanchisha.github.io/cookiecutter-lightning-hydra
 site_description: A cookiecutter template for Python projects that use uv for its dependency management
-site_author: Yang Liu
+site_author: Wan Chisha
 edit_uri: edit/main/docs/
-repo_name: foreverYoungGitHub/cookiecutter-pytorch-lightning
-copyright: Maintained by <a href="https://foreveryounggithub.github.io/">Yang</a>.
+repo_name: wanchisha/cookiecutter-lightning-hydra
+copyright: Maintained by <a href="https://wanchisha.github.io/">Wan</a>.
 
 nav:
   - Home: index.md
@@ -60,9 +60,9 @@ theme:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/foreverYoungGitHub/cookiecutter-pytorch-lightning
+      link: https://github.com/wanchisha/cookiecutter-lightning-hydra
     - icon: fontawesome/brands/python
-      link: https://pypi.org/project/cookiecutter-pytorch-lightning/
+      link: https://pypi.org/project/cookiecutter-lightning-hydra/
 markdown_extensions:
   - toc:
       permalink: true
