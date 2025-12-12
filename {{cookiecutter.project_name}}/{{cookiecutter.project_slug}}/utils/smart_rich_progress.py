@@ -37,12 +37,29 @@ class SmartRichProgressBar(RichProgressBar):
         super().__init__(*args, **kwargs)
         self._max_sig = max_significant_digits
 
-    def get_progress_bar_dict(self, trainer, pl_module):
-        # delegate to parent to build the standard progress dict
-        pb_dict = super().get_progress_bar_dict(trainer, pl_module)
+    def get_metrics(self, trainer, pl_module):
+        """Return progress bar metrics with smart numeric formatting.
 
-        # Format each value if it's numeric
-        for k, v in list(pb_dict.items()):
-            pb_dict[k] = _smart_format_value(v, max_sig=self._max_sig)
+        This overrides the Lightning `ProgressBar.get_metrics` hook which is used by
+        modern versions of Lightning to collect items shown in the progress bar.
 
-        return pb_dict
+        We format numeric values (including floats in nested dicts) to strings using
+        `_smart_format_value` so Rich's default `metrics_format` (e.g. `.3f`) is not
+        applied on top of our desired representation.
+        """
+        # delegate to parent to get the standard metrics dict
+        try:
+            metrics = super().get_metrics(trainer, pl_module)
+        except Exception:
+            # If for some reason the parent doesn't implement it, fall back to an empty dict
+            metrics = {}
+
+        def _format_item(item):
+            # format basic numeric types
+            if isinstance(item, (int, float)):
+                return _smart_format_value(item, max_sig=self._max_sig)
+            if isinstance(item, dict):
+                return {k: _format_item(v) for k, v in item.items()}
+            return item
+
+        return {k: _format_item(v) for k, v in metrics.items()}
