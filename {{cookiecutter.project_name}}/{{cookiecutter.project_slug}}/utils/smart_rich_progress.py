@@ -1,19 +1,23 @@
-from typing import Any
+from typing import Any, Optional
 
 from lightning.pytorch.callbacks import RichProgressBar
 
 
-def _smart_format_value(val: Any, max_sig: int = 6) -> Any:
+def _smart_format_value(val: Any, max_sig: Optional[int] = 6) -> Any:
     """Format numbers smartly for progress display.
 
     - ints are kept as-is
-    - floats use general format with up to `max_sig` significant digits (no trailing zeros)
+    - floats use general format with up to `max_sig` significant digits (no trailing zeros).
+      If ``max_sig`` is ``None``, the function will return ``str(val)`` which preserves
+      the full Python float string representation (no forced truncation).
     - other values are returned unchanged or converted to str as a fallback
     """
     try:
         if isinstance(val, float):
-            # general format removes unnecessary trailing zeros and switches to scientific
-            # notation when appropriate, similar to logging-like compact output
+            # If max_sig is None -> return Python's str representation (no artificial limit).
+            # Otherwise use general format with up to `max_sig` significant digits.
+            if max_sig is None:
+                return str(val)
             return format(val, f".{max_sig}g")
         if isinstance(val, int):
             return str(val)
@@ -27,13 +31,13 @@ class SmartRichProgressBar(RichProgressBar):
     """A small subclass of Lightning's RichProgressBar that formats numeric
     metric values more compactly instead of always showing 3 decimal places.
 
-    It overrides `get_progress_bar_dict` and applies `_smart_format_value` to
+    It overrides `get_metrics` and applies `_smart_format_value` to
     all displayed values. This keeps behavior compatible while improving
     readability for floats like 1.0 -> "1", 0.123456 -> "0.123456",
     and very small/large numbers in scientific notation when appropriate.
     """
 
-    def __init__(self, *args, max_significant_digits: int = 6, **kwargs):
+    def __init__(self, *args, max_significant_digits: Optional[int] = None, **kwargs):
         super().__init__(*args, **kwargs)
         self._max_sig = max_significant_digits
 
