@@ -1,0 +1,3 @@
+ema:
+  _target_: lightning.pytorch.callbacks.EMAWeightAveraging
+  decay: 0.9999
